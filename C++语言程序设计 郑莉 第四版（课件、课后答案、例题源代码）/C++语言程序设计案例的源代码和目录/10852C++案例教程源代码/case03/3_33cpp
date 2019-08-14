@@ -1,0 +1,15 @@
+#include<iostream>
+#include <cmath>
+#include <cstdlib>
+using namespace std;
+void main( void )
+{	double x = 2.387;   int n = 3, c;
+	cout<< "Bessel functions for x = "<< x<<endl;
+	cout<<" Kind\t\tOrder\tFunction\tResult\n " ;
+	cout<< " First\t\t0\t_j0( x )\t"<< _j0( x )<<endl;
+	cout<< " First\t\t1\t_j1( x )\t"<< _j1( x ) <<endl;
+	for( c = 2; c < 5; c++ )     cout<<" First\t\t"<<c<<"\t_jn( n, x )\t"<< _jn( c, x )<<endl;
+	cout<< " Second\t0\t_y0( x )\t"<< _y0( x )<<endl;
+	cout<< " Second\t1\t_y1( x )\t"<< _y1( x ) <<endl;
+	for( c = 2; c < 5; c++ )    cout<< " Second\t"<<c<<"\t_yn( n, x )\t"<< _yn( c, x )<<endl;
+}

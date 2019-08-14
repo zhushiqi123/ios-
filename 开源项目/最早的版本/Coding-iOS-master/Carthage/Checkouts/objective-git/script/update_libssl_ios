@@ -1,0 +1,68 @@
+#!/bin/bash
+
+set -e
+
+# source the common build functions
+SCRIPT_DIR=$(dirname "$0")
+source "${SCRIPT_DIR}/ios_build_functions.sh"
+
+function setup ()
+{
+    if [ -f "${INSTALL_PATH}/lib/libssl.a" -a \
+       -f "${INSTALL_PATH}/lib/libcrypto.a" -a \
+       -d "${INSTALL_PATH}/include/openssl" ]
+    then
+        echo "No update needed."
+        exit 0
+    fi
+
+    LIBRARY_NAME="OpenSSL"
+}
+
+function build_ssl ()
+{
+    cp -r "${ROOT_PATH}/External/openssl" "${ARCH_INSTALL_PATH}/openssl"
+    pushd "${ARCH_INSTALL_PATH}/openssl" > /dev/null
+
+    if [ "${ARCH}" == "arm64" ] || [ "${ARCH}" == "x86_64" ]
+    then
+        HOST="BSD-generic64"
+        CONFIG="no-gost no-asm enable-ec_nistp_64_gcc_128"
+    else
+        HOST="BSD-generic32"
+        CONFIG="no-gost no-asm"
+        perl -i -pe 's|static volatile sig_atomic_t intr_signal|static volatile int intr_signal|' crypto/ui/ui_openssl.c
+    fi
+
+    ./Configure ${HOST} ${CONFIG} --openssldir="${ARCH_INSTALL_PATH}" >> "${LOG}" 2>&1
+    perl -i -pe "s|^CC= gcc|CC= ${CLANG} -miphoneos-version-min=${IPHONEOS_DEPLOYMENT_TARGET} -arch ${ARCH} -fembed-bitcode |g" Makefile >> "${LOG}" 2>&1
+    perl -i -pe "s|^CFLAG= (.*)|CFLAG= -isysroot ${SDKROOT} \$1|g" Makefile >> "${LOG}" 2>&1
+    make >> "${LOG}" 2>&1
+
+    make install_sw >> "${LOG}" 2>&1
+    popd > /dev/null
+
+    rm -rf "${ARCH_INSTALL_PATH}/openssl"
+
+    BUILT_CRYPTO_PATHS+=("${ARCH_INSTALL_PATH}/lib/libcrypto.a")
+    BUILT_SSL_PATHS+=("${ARCH_INSTALL_PATH}/lib/libssl.a")
+}
+
+function fat_binary ()
+{
+    echo "Copying headers & pkg-config files"
+    cp -r "${ARCH_INSTALL_PATH}/include/openssl" "${INSTALL_PATH}/include/"
+    for pkgfile in "${ARCH_INSTALL_PATH}"/lib/pkgconfig/*.pc; do
+      cp "${pkgfile}" "${INSTALL_PATH}/lib/pkgconfig/"
+      perl -i -pe "s|^(prefix=${INSTALL_PATH}).*$|\$1|g" "${INSTALL_PATH}/lib/pkgconfig/$(basename "${pkgfile}")" >> "${LOG}" 2>&1
+    done
+
+    echo "Building fat binary..."
+
+    lipo -create "${BUILT_CRYPTO_PATHS[@]}" -output "${INSTALL_PATH}/lib/libcrypto.a"
+    lipo -create "${BUILT_SSL_PATHS[@]}" -output "${INSTALL_PATH}/lib/libssl.a"
+
+    echo "Building done."
+}
+
+build_all_archs setup build_ssl fat_binary

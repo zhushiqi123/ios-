@@ -1,0 +1,14 @@
+﻿生成启动时间为 2015/11/22 17:38:59。
+     1>项目“F:\qq\392146463\FileRecv\C++V4实验Windows\C++语言程序设计（第4版）实验代码\ch03\lab3_4\lab3_4.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         F:\vsMSDN\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt lab3_4.cpp
+         lab3_4.cpp
+       Link:
+         F:\vsMSDN\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"F:\qq\392146463\FileRecv\C++V4实验Windows\C++语言程序设计（第4版）实验代码\ch03\Debug\lab3_4.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"F:\qq\392146463\FileRecv\C++V4实验Windows\C++语言程序设计（第4版）实验代码\ch03\Debug\lab3_4.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"F:\qq\392146463\FileRecv\C++V4实验Windows\C++语言程序设计（第4版）实验代码\ch03\Debug\lab3_4.lib" /MACHINE:X86 /SAFESEH Debug\lab3_4.obj
+     1>lab3_4.obj : warning LNK4075: 忽略“/EDITANDCONTINUE”(由于“/SAFESEH”规范)
+         lab3_4.vcxproj -> F:\qq\392146463\FileRecv\C++V4实验Windows\C++语言程序设计（第4版）实验代码\ch03\Debug\lab3_4.exe
+     1>已完成生成项目“F:\qq\392146463\FileRecv\C++V4实验Windows\C++语言程序设计（第4版）实验代码\ch03\lab3_4\lab3_4.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:05.58
